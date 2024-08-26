@@ -1,7 +1,7 @@
 const taskListsData = [
   {
     id: 1,
-    category: 'personal',
+    category: 'Personal',
     taskList: [
       {
         id: 1,
@@ -27,7 +27,7 @@ const taskListsData = [
   },
   {
     id: 2,
-    category: 'job',
+    category: 'Job',
     taskList: [
       {
         id: 1,
@@ -58,7 +58,7 @@ const taskListsData = [
   },
   {
     id: 3,
-    category: 'shopping',
+    category: 'Shopping',
     taskList: [
       {
         id: 1,

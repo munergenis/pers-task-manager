@@ -1,6 +1,7 @@
+import taskListsData from 'src/data/taskListsData'
 import Layout from 'layout/index'
 import TaskList from 'components/TaskList/index'
-import taskListsData from 'src/data/taskListsData'
+import CategoryList from 'components/CategoryList/index'
 import { useState } from 'react'
 
 const App = () => {
@@ -45,20 +46,22 @@ const App = () => {
   }
 
   function toggleTaskCompleted (taskID, categoryID) {
+    const getTaskListUpdated = (taskID, categoryTaskList) => {
+      const taskListUpdated = categoryTaskList.map(task =>
+        task.id === taskID
+          ? { ...task, completed: !task.completed }
+          : task
+      )
+      return taskListUpdated
+    }
+
     setAllData(prevData => prevData.map(category => (
-      category.id !== categoryID
-        ? category
-        : {
+      category.id === categoryID
+        ? {
             ...category,
-            taskList: category.taskList.map(task => (
-              task.id !== taskID
-                ? task
-                : {
-                    ...task,
-                    completed: !task.completed
-                  }
-            ))
+            taskList: getTaskListUpdated(taskID, category.taskList)
           }
+        : category
     )))
   }
 
@@ -67,7 +70,13 @@ const App = () => {
       <Layout.Header />
 
       <div className='flex flex-1'>
-        <Layout.Sidebar />
+        <Layout.Sidebar>
+          <CategoryList>
+            {allData.map(({ id, category }) => (
+              <CategoryList.Item key={id}>{category}</CategoryList.Item>
+            ))}
+          </CategoryList>
+        </Layout.Sidebar>
 
         {selectedCategory
           ? (
