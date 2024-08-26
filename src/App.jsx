@@ -12,6 +12,7 @@ const App = () => {
       : null
   )
   const selectedCategory = getSelectedCategory()
+  console.log(selectedCategory)
 
   function getSelectedCategory () {
     return allData.find(category => category.id === selectedCategoryID)
@@ -65,6 +66,10 @@ const App = () => {
     )))
   }
 
+  function selectCategory (categoryID) {
+    setSelectedCategoryID(categoryID)
+  }
+
   return (
     <div className='flex min-h-screen flex-col font-inter'>
       <Layout.Header />
@@ -73,14 +78,20 @@ const App = () => {
         <Layout.Sidebar>
           <CategoryList>
             {allData.map(({ id, category }) => (
-              <CategoryList.Item key={id}>{category}</CategoryList.Item>
+              <CategoryList.Item
+                key={id}
+                isSelected={id === selectedCategoryID}
+                selectCategory={() => selectCategory(id)}
+              >
+                {category}
+              </CategoryList.Item>
             ))}
           </CategoryList>
         </Layout.Sidebar>
 
         {selectedCategory
           ? (
-            <TaskList>
+            <TaskList selectedCategoryName={selectedCategory.category}>
               {getTaskListElements(selectedCategory)}
             </TaskList>
             )
