@@ -1,7 +1,9 @@
+import Header from 'components/Header/Header'
+
 const App = () => {
   return (
-    <div>
-      <h1 className='text-2xl'>App here</h1>
+    <div className='font-inter'>
+      <Header />
     </div>
   )
 }
