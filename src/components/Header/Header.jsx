@@ -12,7 +12,7 @@ const Header = () => {
       </h1>
 
       <Button
-        className='hover:bg-neutral-800 active:bg-neutral-600'
+        className='hover:bg-neutral-600 active:opacity-65'
         icon={<PlusCircledIcon />}
       >
         Add Task
