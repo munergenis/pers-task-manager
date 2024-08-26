@@ -1,9 +1,9 @@
 import Button from 'components/Button/Button'
-import { PlusCircledIcon } from '@radix-ui/react-icons'
+import { CirclePlus } from 'lucide-react'
 
 const Header = () => {
   return (
-    <header className='bg-black text-white flex items-center justify-between py-6 px-6'>
+    <header className='flex items-center justify-between bg-black p-6 text-white'>
 
       <h1
         className='text-2xl font-semibold'
@@ -13,7 +13,7 @@ const Header = () => {
 
       <Button
         className='hover:bg-neutral-600 active:opacity-65'
-        icon={<PlusCircledIcon />}
+        icon={<CirclePlus size={18} />}
       >
         Add Task
       </Button>

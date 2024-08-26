@@ -1,16 +1,42 @@
-import Header from 'components/Header/Header'
-import Footer from 'components/Footer/Footer'
-import Sidebar from './components/Sidebar/Sidebar'
+import Layout from 'layout/index'
+import TaskList from 'components/TaskList/index'
+import taskListsData from 'src/data/taskListsData'
+import { useState } from 'react'
 
 const App = () => {
+  const [selectedCategory, setSelectedCategory] = useState(taskListsData.length ? taskListsData[0] : null)
+
+  function getTaskListElements (selectedCategory) {
+    return selectedCategory.taskList.map(taskItem => (
+      <TaskList.Item
+        key={taskItem.id}
+        completed={taskItem.completed}
+      >
+        {taskItem.task}
+      </TaskList.Item>
+    ))
+  }
+
   return (
-    <div className='font-inter flex flex-col min-h-screen'>
-      <Header />
-      <div className='flex-1 flex'>
-        <Sidebar />
-        <main className='px-6 py-4'>main here</main>
+    <div className='flex min-h-screen flex-col font-inter'>
+      <Layout.Header />
+
+      <div className='flex flex-1'>
+        <Layout.Sidebar />
+
+        {selectedCategory
+          ? (
+            <TaskList>
+              {getTaskListElements(selectedCategory)}
+            </TaskList>
+            )
+
+          : (
+            <div>No data</div>
+            )}
       </div>
-      <Footer />
+
+      <Layout.Footer />
     </div>
   )
 }
