@@ -2,26 +2,19 @@ import Layout from 'layout/index'
 import TaskList from 'components/TaskList/index'
 import taskListsData from 'src/data/taskListsData'
 import { useState } from 'react'
-import { useEffect } from 'react'
 
 const App = () => {
   const [allData, setAllData] = useState(taskListsData)
-  const [selectedCategory, setSelectedCategory] = useState(
+  const [selectedCategoryID, setSelectedCategoryID] = useState(
     allData.length
-      ? allData[0]
+      ? allData[0].id
       : null
   )
+  const selectedCategory = getSelectedCategory()
 
-  useEffect(() => {
-    setSelectedCategory(prevSelectedCategory => {
-      return allData.filter(category => {
-        console.log(category.id)
-        console.log(prevSelectedCategory.id)
-        console.log(prevSelectedCategory.id === category.id)
-        return category.id === prevSelectedCategory.id
-      })[0]
-    })
-  }, [allData])
+  function getSelectedCategory () {
+    return allData.find(category => category.id === selectedCategoryID)
+  }
 
   function getTaskListElements (selectedCategory) {
     return selectedCategory.taskList.map(
@@ -30,6 +23,7 @@ const App = () => {
           key={taskItem.id}
           completed={taskItem.completed}
           deleteTask={() => deleteTask(taskItem.id, selectedCategory.id)}
+          toggleTaskCompleted={() => toggleTaskCompleted(taskItem.id, selectedCategory.id)}
         >
           {taskItem.task}
         </TaskList.Item>
@@ -50,6 +44,24 @@ const App = () => {
     )
   }
 
+  function toggleTaskCompleted (taskID, categoryID) {
+    setAllData(prevData => prevData.map(category => (
+      category.id !== categoryID
+        ? category
+        : {
+            ...category,
+            taskList: category.taskList.map(task => (
+              task.id !== taskID
+                ? task
+                : {
+                    ...task,
+                    completed: !task.completed
+                  }
+            ))
+          }
+    )))
+  }
+
   return (
     <div className='flex min-h-screen flex-col font-inter'>
       <Layout.Header />
@@ -65,7 +77,7 @@ const App = () => {
             )
 
           : (
-            <div>No data</div>
+            <div>No category available</div>
             )}
       </div>
 
