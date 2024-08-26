@@ -46,6 +46,13 @@ const App = () => {
     )
   }
 
+  function deleteCompletedTasks () {
+    setAllData(prevData => prevData.map(category => ({
+      ...category,
+      taskList: category.taskList.filter(task => !task.completed)
+    })))
+  }
+
   function toggleTaskCompleted (taskID, categoryID) {
     const getTaskListUpdated = (taskID, categoryTaskList) => {
       const taskListUpdated = categoryTaskList.map(task =>
@@ -101,7 +108,7 @@ const App = () => {
             )}
       </div>
 
-      <Layout.Footer />
+      <Layout.Footer deleteCompletedTasks={deleteCompletedTasks} />
     </div>
   )
 }
