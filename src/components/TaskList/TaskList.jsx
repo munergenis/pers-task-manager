@@ -5,7 +5,7 @@ const TaskList = ({ selectedCategoryName, children }) => {
         <h3 className='text-2xl'>{selectedCategoryName}</h3>
       </header>
       <main>
-        <ul className='flex flex-col gap-3 text-lg'>
+        <ul className='flex flex-col gap-2 text-lg'>
           {children}
         </ul>
       </main>
