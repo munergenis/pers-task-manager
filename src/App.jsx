@@ -9,6 +9,7 @@ import Label from 'components/Label/Label'
 import Button from 'components/Button/Button'
 import { useState } from 'react'
 import { nanoid } from 'nanoid'
+import arrowImg from 'assets/arrow-img.png'
 
 const App = () => {
   const [allData, setAllData] = useState(taskListsData)
@@ -186,7 +187,22 @@ const App = () => {
             )
 
           : (
-            <div>No category available</div>
+            <div className='flex w-full flex-col items-center justify-center gap-16 p-8 font-shadows text-4xl text-neutral-400'>
+              <h3>
+                Your task manager is empty
+              </h3>
+              <div className='flex gap-2'>
+                <p>...</p>
+              </div>
+              <button
+                className='relative rounded-lg border border-neutral-300 bg-black p-4 font-inter text-base text-white'
+                onClick={() => setAddingNewCategory(true)}
+              >
+                Add category
+                <img src={arrowImg} className='absolute -left-24 -top-3 w-16 rotate-12 opacity-55' />
+                <img src={arrowImg} className='absolute -right-24 top-0 w-16 rotate-[190deg] opacity-55' />
+              </button>
+            </div>
             )}
       </div>
 
