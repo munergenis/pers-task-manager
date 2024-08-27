@@ -1,4 +1,4 @@
-import TaskList from 'components/Tasklist/TaskList'
+import TaskList from 'components/TaskList/TaskList'
 import TaskListItem from 'components/TaskList/TaskListItem'
 
 TaskList.Item = TaskListItem
