@@ -39,18 +39,48 @@ const App = () => {
   }
 
   function getTaskListElements (selectedCategory) {
-    return selectedCategory.taskList.map(
-      taskItem => (
-        <TaskList.Item
-          key={taskItem.id}
-          completed={taskItem.completed}
-          deleteTask={() => deleteTask(taskItem.id, selectedCategory.id)}
-          toggleTaskCompleted={() => toggleTaskCompleted(taskItem.id, selectedCategory.id)}
-        >
-          {taskItem.task}
-        </TaskList.Item>
+    if (selectedCategory.taskList.length) {
+      return selectedCategory.taskList.map(
+        taskItem => (
+          <TaskList.Item
+            key={taskItem.id}
+            completed={taskItem.completed}
+            deleteTask={() => deleteTask(taskItem.id, selectedCategory.id)}
+            toggleTaskCompleted={() => toggleTaskCompleted(taskItem.id, selectedCategory.id)}
+          >
+            {taskItem.task}
+          </TaskList.Item>
+        )
       )
-    )
+    } else {
+      return (
+        <div className='flex w-full flex-col items-center justify-center gap-16 p-8 font-shadows text-4xl text-neutral-400'>
+          <h3>
+            Your {selectedCategory.category} category is empty
+          </h3>
+          <div className='flex gap-2'>
+            <p>...</p>
+          </div>
+          <div className='grid grid-cols-3 items-center'>
+            <button
+              className='relative rounded-lg border border-neutral-300 bg-black p-4 font-inter text-base text-white'
+              onClick={() => setAddingNewTask(true)}
+            >
+              Add task
+              <img src={arrowImg} className='absolute -left-24 -top-3 w-16 rotate-12 opacity-55' />
+            </button>
+            <p className='text-center'>OR</p>
+            <button
+              className='relative rounded-lg border border-neutral-300 bg-red-500 p-4 font-inter text-base text-white'
+              onClick={() => deleteCategory(selectedCategory.id)}
+            >
+              Delete category
+              <img src={arrowImg} className='absolute -right-24 top-0 w-16 rotate-[190deg] opacity-55' />
+            </button>
+          </div>
+        </div>
+      )
+    }
   }
 
   function deleteTask (taskID, categoryID) {
@@ -185,7 +215,6 @@ const App = () => {
               {getTaskListElements(selectedCategory)}
             </TaskList>
             )
-
           : (
             <div className='flex w-full flex-col items-center justify-center gap-16 p-8 font-shadows text-4xl text-neutral-400'>
               <h3>
