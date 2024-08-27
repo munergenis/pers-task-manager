@@ -4,6 +4,7 @@ import TaskList from 'components/TaskList/index'
 import CategoryList from 'components/CategoryList/index'
 import Dialog from 'components/Dialog/index'
 import Input from 'components/Input/Input'
+import InputValidation from 'components/InputValidation/InputValidation'
 import Label from 'components/Label/Label'
 import Button from 'components/Button/Button'
 import { useState } from 'react'
@@ -17,7 +18,10 @@ const App = () => {
       : null
   )
   const [addingNewTask, setAddingNewTask] = useState(false)
-  const [newTask, setNewTask] = useState(null)
+  const [addingNewCategory, setAddingNewCategory] = useState(false)
+  const [newTask, setNewTask] = useState('')
+  const [newCategory, setNewCategory] = useState('')
+  const [inputValidation, setInputValidation] = useState(false)
 
   const selectedCategory = getSelectedCategory()
 
@@ -85,11 +89,23 @@ const App = () => {
   }
 
   function closeNewTaskModal () {
+    if (inputValidation) setInputValidation(false)
     setAddingNewTask(false)
-    setNewTask(null)
+    setNewTask('')
+  }
+
+  function closeNewCategoryModal () {
+    if (inputValidation) setInputValidation(false)
+    setAddingNewCategory(false)
+    setNewCategory('')
   }
 
   function addNewTask () {
+    if (!newTask) {
+      setInputValidation(true)
+      return
+    }
+
     const getNewTask = () => {
       return {
         id: nanoid(),
@@ -97,11 +113,34 @@ const App = () => {
         completed: false
       }
     }
+
     setAllData(prevData => prevData.map(category => (
       category.id === selectedCategoryID
         ? { ...category, taskList: [getNewTask(), ...category.taskList] }
         : category
     )))
+
+    closeNewTaskModal()
+  }
+
+  function addNewCategory () {
+    if (!newCategory) {
+      setInputValidation(true)
+      return
+    }
+
+    const newCategoryID = nanoid()
+    const getNewCategory = () => {
+      return {
+        id: newCategoryID,
+        category: newCategory,
+        taskList: []
+      }
+    }
+
+    setAllData(prevData => [getNewCategory(), ...prevData])
+    setSelectedCategoryID(newCategoryID)
+    closeNewCategoryModal()
   }
 
   return (
@@ -109,7 +148,7 @@ const App = () => {
       <Layout.Header openAddTaskModal={() => setAddingNewTask(true)} />
 
       <div className='flex flex-1'>
-        <Layout.Sidebar>
+        <Layout.Sidebar openAddCategoryModal={() => setAddingNewCategory(true)}>
           <CategoryList>
             {allData.map(({ id, category }) => (
               <CategoryList.Item
@@ -142,34 +181,79 @@ const App = () => {
               {selectedCategory.category}
             </Dialog.Title>
           </Dialog.Header>
-          <div className='grid grid-cols-4 items-center gap-4 py-4'>
-            <Label>New task</Label>
-            <Input
-              className='col-span-3'
-              placeholder='Buy lots of ice-cream'
-              onChange={setNewTask}
-              value={newTask || ''}
-              onEnter={() => {
-                addNewTask()
-                closeNewTaskModal()
-              }}
-            />
+
+          <div className='flex flex-col gap-2'>
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label>New task</Label>
+              <Input
+                className='col-span-3'
+                placeholder='Buy lots of ice-cream'
+                onChange={(text) => {
+                  if (inputValidation) {
+                    setInputValidation(false)
+                  }
+                  setNewTask(text)
+                }}
+                value={newTask || ''}
+                onEnter={addNewTask}
+              />
+            </div>
+            {inputValidation &&
+              <InputValidation>Task can not be empty</InputValidation>}
           </div>
+
           <Dialog.Footer>
             <Button
               className='border text-sm hover:bg-neutral-100'
               onClick={closeNewTaskModal}
-              tabIndex={0}
             >
               Dismiss
             </Button>
             <Button
               className='bg-black text-sm text-white hover:bg-black/80'
-              onClick={() => {
-                addNewTask()
-                closeNewTaskModal()
-              }}
-              tabIndex={0}
+              onClick={addNewTask}
+            >
+              Add
+            </Button>
+          </Dialog.Footer>
+        </Dialog>}
+
+      {addingNewCategory &&
+        <Dialog open={addingNewCategory} close={closeNewCategoryModal}>
+          <Dialog.Header>
+            <Dialog.Title>Add {newCategory || 'new'} category</Dialog.Title>
+          </Dialog.Header>
+
+          <div className='flex flex-col gap-2'>
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label>New category</Label>
+              <Input
+                className='col-span-3'
+                placeholder='Travel Stuff'
+                onChange={(text) => {
+                  if (inputValidation) {
+                    setInputValidation(false)
+                  }
+                  setNewCategory(text)
+                }}
+                value={newCategory || ''}
+                onEnter={addNewCategory}
+              />
+            </div>
+            {inputValidation &&
+              <InputValidation>Category can not be empty</InputValidation>}
+          </div>
+
+          <Dialog.Footer>
+            <Button
+              className='border text-sm hover:bg-neutral-100'
+              onClick={closeNewCategoryModal}
+            >
+              Dismiss
+            </Button>
+            <Button
+              className='bg-black text-sm text-white hover:bg-black/80'
+              onClick={addNewCategory}
             >
               Add
             </Button>

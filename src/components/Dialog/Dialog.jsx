@@ -17,7 +17,7 @@ const Dialog = ({ open, close, children }) => {
 
   return (
     <dialog
-      className='relative flex flex-col gap-2 rounded-lg border p-6 shadow-lg backdrop:bg-white/75'
+      className='relative flex flex-col gap-8 rounded-lg border p-6 shadow-lg backdrop:bg-white/75'
       ref={ref}
       onClose={close}
     >
