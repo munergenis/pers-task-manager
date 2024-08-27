@@ -26,7 +26,15 @@ const App = () => {
   const selectedCategory = getSelectedCategory()
 
   function getSelectedCategory () {
-    return allData.find(category => category.id === selectedCategoryID)
+    if (allData.length) {
+      if (!selectedCategoryID) {
+        setSelectedCategoryID(allData[0].id)
+      } else {
+        return allData.find(category => category.id === selectedCategoryID)
+      }
+    } else {
+      return ''
+    }
   }
 
   function getTaskListElements (selectedCategory) {
@@ -55,6 +63,13 @@ const App = () => {
             }
       )
     )
+  }
+
+  function deleteCategory (categoryID) {
+    setAllData(prevData => prevData.filter(category => category.id !== categoryID))
+    if (categoryID === selectedCategoryID) {
+      setSelectedCategoryID('')
+    }
   }
 
   function deleteCompletedTasks () {
@@ -155,6 +170,7 @@ const App = () => {
                 key={id}
                 isSelected={id === selectedCategoryID}
                 selectCategory={() => selectCategory(id)}
+                deleteCategory={() => deleteCategory(id)}
               >
                 {category}
               </CategoryList.Item>

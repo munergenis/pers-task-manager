@@ -7,7 +7,7 @@ const TaskListItem = ({ completed, deleteTask, toggleTaskCompleted, children }) 
         {completed
           ? <SquareCheckBig size={20} />
           : <Square size={20} />}
-        <p className={completed ? 'line-through' : undefined}>{children}</p>
+        <p className={`text-left ${completed ? 'line-through' : undefined}`}>{children}</p>
       </button>
 
       <button className='rounded-full bg-red-500 p-2 text-white hover:bg-red-400 active:opacity-65' onClick={deleteTask}>
